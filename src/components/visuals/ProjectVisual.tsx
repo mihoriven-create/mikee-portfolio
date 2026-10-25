@@ -181,9 +181,8 @@ function Calculator() {
   return (
     <div className="mx-auto flex h-full w-full max-w-sm flex-col gap-3 rounded-2xl border border-gold/15 bg-ink-2 p-5">
       <p className="font-display text-xs uppercase tracking-[0.3em] text-gold">DSCR Calculator</p>
-      <Field label="Property income" />
-      <Field label="Expenses" />
-      <Field label="Debt service" />
+      <Field label="Property figures" />
+      <Field label="Loan details" />
       <div className="mt-auto flex items-center justify-between rounded-xl border border-gold/50 bg-gold/10 px-4 py-3">
         <span className="font-display text-xs uppercase tracking-[0.25em] text-gold-light">DSCR</span>
         <span className="font-display text-2xl font-semibold text-gold-light" aria-hidden="true">

@@ -1,8 +1,9 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { Check, Copy, Mail, MessageCircle, Phone, Send } from "lucide-react";
+import { Check, Copy, Mail, MessageCircle, MessageSquareText, Phone, Send } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
+import { openContactForm } from "./ContactForm";
 import { mailto, site } from "@/data/site";
 
 const gmailCompose = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(site.email)}`;
@@ -65,6 +66,17 @@ export function EmailOptions({ onDone }: { onDone?: () => void }) {
   const { copied, copy } = useCopy();
   return (
     <div className="flex flex-col gap-1">
+      <button
+        type="button"
+        onClick={() => {
+          onDone?.();
+          openContactForm();
+        }}
+        aria-haspopup="dialog"
+        className={item}
+      >
+        <MessageSquareText className="size-4 text-gold" aria-hidden="true" /> Send me a message
+      </button>
       <button type="button" onClick={copy} className={item}>
         {copied ? <Check className="size-4 text-gold" aria-hidden="true" /> : <Copy className="size-4 text-gold" aria-hidden="true" />}
         <span aria-live="polite">{copied ? "Email copied!" : "Copy email address"}</span>

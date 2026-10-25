@@ -171,14 +171,23 @@ export const projects: Project[] = [
     name: "Jotform DSCR Loan Calculator",
     summary:
       "A Debt Service Coverage Ratio (DSCR) loan calculator built in Jotform to support loan scenario conversations.",
+    status: "Implemented",
     steps: [
       {
+        label: "Challenge",
+        body: "Loan conversations often come down to one number, the debt service coverage ratio (DSCR): how well a property’s income covers its loan payments. Working it out by hand each time slows the conversation and makes results harder to keep consistent.",
+      },
+      {
         label: "Solution",
-        body: "A DSCR loan calculator built as a Jotform form, giving a guided way to work through DSCR loan inputs.",
+        body: "A calculator built as a Jotform form. Enter the property and loan figures and the form works out the DSCR automatically, so every scenario is run the same way.",
       },
       {
         label: "Implementation",
-        body: "Built in Jotform using form calculation fields.",
+        body: "Built in Jotform using form calculation fields that compute the ratio from the figures entered.",
+      },
+      {
+        label: "Outcome",
+        body: "A ready-to-use calculator that returns the DSCR as soon as the figures are entered, giving a quick and consistent way to size up a loan scenario.",
       },
     ],
     stack: ["Jotform", "Calculated Fields"],

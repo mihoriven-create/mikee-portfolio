@@ -1,11 +1,16 @@
 import { ArrowUp, ArrowUpRight, CalendarDays, Mail, MapPin, MessageCircle } from "lucide-react";
+import { OpenContactFormButton } from "@/components/ui/ContactForm";
 import { CopyEmail } from "@/components/ui/EmailConnect";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { RevealPanel } from "@/components/ui/RevealPanel";
-import { mailto, navLinks, site } from "@/data/site";
+import { navLinks, site } from "@/data/site";
 
+const cardClass =
+  "focus-ring group relative flex h-full w-full flex-col justify-between gap-10 overflow-hidden rounded-[28px] border border-gold/25 bg-ink p-6 text-left transition-all duration-500 hover:-translate-y-1 hover:border-gold hover:shadow-[0_30px_60px_-30px_rgba(212,175,55,0.6)] sm:p-8";
+
+// The email card opens the message form (no href); the others are links.
 const channels = [
-  { label: "Email Me", detail: site.email, href: mailto, icon: Mail, external: false },
+  { label: "Email Me", detail: site.email, href: undefined, icon: Mail, external: false },
   { label: "WhatsApp Me", detail: site.phoneDisplay, href: site.whatsapp, icon: MessageCircle, external: true },
   { label: "Book a Call", detail: "30-minute call on Calendly", href: site.calendly, icon: CalendarDays, external: true },
 ];
@@ -39,11 +44,8 @@ export function Contact() {
         <ul className="mt-14 grid gap-4 md:grid-cols-3">
           {channels.map(({ label, detail, href, icon: Icon, external }, i) => (
             <FadeIn as="li" key={label} delay={i * 0.1}>
-              <a
-                href={href}
-                {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                className="focus-ring group relative flex h-full flex-col justify-between gap-10 overflow-hidden rounded-[28px] border border-gold/25 bg-ink p-6 transition-all duration-500 hover:-translate-y-1 hover:border-gold hover:shadow-[0_30px_60px_-30px_rgba(212,175,55,0.6)] sm:p-8"
-              >
+              {href ? (
+                <a href={href} {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})} className={cardClass}>
                 <span aria-hidden="true" className="absolute inset-0 translate-y-full bg-gradient-to-t from-gold/20 to-transparent transition-transform duration-700 ease-premium group-hover:translate-y-0" />
                 <span className="relative flex items-center justify-between">
                   <span className="grid size-12 place-items-center rounded-2xl border border-gold/40 bg-gold/10 text-gold transition-colors duration-500 group-hover:bg-gold group-hover:text-ink">
@@ -55,8 +57,24 @@ export function Contact() {
                   <span className="block font-display text-2xl font-semibold uppercase tracking-tight text-ivory">{label}</span>
                   <span className="mt-1 block break-all text-sm text-mist">{detail}</span>
                 </span>
-                {external && <span className="sr-only">(opens in a new tab)</span>}
-              </a>
+                  {external && <span className="sr-only">(opens in a new tab)</span>}
+                </a>
+              ) : (
+                <OpenContactFormButton className={cardClass}>
+                <span aria-hidden="true" className="absolute inset-0 translate-y-full bg-gradient-to-t from-gold/20 to-transparent transition-transform duration-700 ease-premium group-hover:translate-y-0" />
+                <span className="relative flex items-center justify-between">
+                  <span className="grid size-12 place-items-center rounded-2xl border border-gold/40 bg-gold/10 text-gold transition-colors duration-500 group-hover:bg-gold group-hover:text-ink">
+                    <Icon className="size-5" aria-hidden="true" />
+                  </span>
+                  <ArrowUpRight aria-hidden="true" className="size-5 text-gold transition-transform duration-500 group-hover:-translate-y-1 group-hover:translate-x-1" />
+                </span>
+                <span className="relative">
+                  <span className="block font-display text-2xl font-semibold uppercase tracking-tight text-ivory">{label}</span>
+                  <span className="mt-1 block break-all text-sm text-mist">{detail}</span>
+                </span>
+                  <span className="sr-only">(opens a message form)</span>
+                </OpenContactFormButton>
+              )}
             </FadeIn>
           ))}
         </ul>
