@@ -1,4 +1,5 @@
 import { FadeIn } from "./FadeIn";
+import { RevealHeading } from "./RevealHeading";
 
 type SectionHeadingProps = {
   id?: string;
@@ -22,17 +23,13 @@ export function SectionHeading({ id, eyebrow, title, tone = "gold", className = 
           </p>
         </FadeIn>
       )}
-      <FadeIn y={40}>
-        <h2
-          id={id}
-          className={`font-display font-black uppercase leading-none tracking-tight ${
-            tone === "gold" ? "gold-text" : "text-ink"
-          }`}
-          style={{ fontSize: "clamp(3rem, 11vw, 150px)" }}
-        >
-          {title}
-        </h2>
-      </FadeIn>
+      <RevealHeading
+        id={id}
+        text={title}
+        className={`font-display font-black uppercase leading-none tracking-tight ${tone === "ink" ? "text-ink" : ""}`}
+        letterClassName={tone === "gold" ? "gold-text" : ""}
+        style={{ fontSize: "clamp(3rem, 11vw, 150px)" }}
+      />
     </div>
   );
 }

@@ -1,10 +1,11 @@
 import { FadeIn } from "@/components/ui/FadeIn";
+import { RevealPanel } from "@/components/ui/RevealPanel";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { expertise, toolGroups } from "@/data/skills";
 
 export function Expertise() {
   return (
-    <section
+    <RevealPanel
       id="expertise"
       aria-labelledby="expertise-title"
       className="relative rounded-t-[40px] bg-ivory px-5 pb-36 pt-20 text-ink sm:rounded-t-[50px] sm:px-8 sm:pt-24 md:rounded-t-[60px] md:px-10 md:pb-44 md:pt-32"
@@ -70,6 +71,6 @@ export function Expertise() {
           ))}
         </div>
       </div>
-    </section>
+    </RevealPanel>
   );
 }

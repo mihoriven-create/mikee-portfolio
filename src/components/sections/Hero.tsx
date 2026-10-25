@@ -5,27 +5,27 @@ import { ArrowDown, ArrowUpRight, CalendarDays, Download } from "lucide-react";
 import { useRef } from "react";
 import { HeroVisual } from "@/components/three/HeroVisual";
 import { CtaLink } from "@/components/ui/CtaLink";
-import { FadeIn } from "@/components/ui/FadeIn";
+import { Magnetic } from "@/components/ui/Magnetic";
 import { site } from "@/data/site";
 
 const ease = [0.25, 0.1, 0.25, 1] as const;
 
 type SplitLettersProps = { text: string; delay: number; className?: string; letterClassName?: string };
 
+// Pure-CSS letter rise: it plays as soon as the HTML paints, without waiting for JavaScript,
+// so the name (the page's largest element) appears immediately.
 function SplitLetters({ text, delay, className, letterClassName = "" }: SplitLettersProps) {
   return (
     <span aria-hidden="true" className={`flex justify-center overflow-hidden ${className ?? ""}`}>
       {text.split("").map((ch, i) => (
-        <motion.span
+        <span
           key={i}
           // Gradient text must sit on each letter because the letters are transformed individually.
-          className={`inline-block ${letterClassName}`}
-          initial={{ y: "105%" }}
-          animate={{ y: 0 }}
-          transition={{ duration: 0.9, delay: delay + i * 0.04, ease }}
+          className={`hero-letter inline-block ${letterClassName}`}
+          style={{ animationDelay: `${delay + i * 0.04}s` }}
         >
           {ch === " " ? " " : ch}
-        </motion.span>
+        </span>
       ))}
     </span>
   );
@@ -53,11 +53,11 @@ export function Hero() {
       </div>
 
       <motion.div style={{ y: headingY, opacity: fade }} className="pointer-events-none relative z-10 px-3 sm:px-6">
-        <FadeIn y={20} delay={0.1}>
+        <div className="hero-fade" style={{ animationDelay: "0.1s" }}>
           <p className="mb-2 text-center font-display text-xs font-medium uppercase tracking-[0.45em] text-gold sm:text-sm">
             {site.title}
           </p>
-        </FadeIn>
+        </div>
         <h1 className="font-display uppercase leading-[0.85] tracking-tight">
           <span className="sr-only">{site.name}</span>
           <SplitLetters
@@ -90,7 +90,7 @@ export function Hero() {
       <div className="min-h-[260px] flex-1" aria-hidden="true" />
 
       <div className="pointer-events-none relative z-20 flex flex-col gap-6 px-5 pb-7 sm:px-8 sm:pb-8 md:flex-row md:items-end md:justify-between md:px-10 md:pb-10 [&_a]:pointer-events-auto">
-        <FadeIn delay={0.35} y={20} className="max-w-[300px] md:max-w-[340px]">
+        <div className="hero-fade max-w-[300px] md:max-w-[340px]" style={{ animationDelay: "0.35s" }}>
           <p className="font-display font-light uppercase leading-snug tracking-wide text-mist [font-size:clamp(0.8rem,1.25vw,1.15rem)]">
             Building reliable CRM systems, automations, and integrations for US-based businesses.
           </p>
@@ -100,19 +100,25 @@ export function Hero() {
           >
             <ArrowDown className="size-4 animate-bounce motion-reduce:animate-none" aria-hidden="true" /> Scroll
           </a>
-        </FadeIn>
+        </div>
 
-        <FadeIn delay={0.5} y={20} className="flex flex-wrap gap-3 md:justify-end">
-          <CtaLink href="#projects" icon={<ArrowUpRight className="size-4" />}>
-            View Projects
-          </CtaLink>
-          <CtaLink href={site.resume} download={site.resumeFileName} variant="ghost" icon={<Download className="size-4" />}>
-            Download Résumé
-          </CtaLink>
-          <CtaLink href={site.calendly} external variant="ghost" icon={<CalendarDays className="size-4" />}>
-            Book a Call
-          </CtaLink>
-        </FadeIn>
+        <div className="hero-fade flex flex-wrap gap-3 md:justify-end" style={{ animationDelay: "0.5s" }}>
+          <Magnetic>
+            <CtaLink href="#projects" icon={<ArrowUpRight className="size-4" />}>
+              View Projects
+            </CtaLink>
+          </Magnetic>
+          <Magnetic>
+            <CtaLink href={site.resume} download={site.resumeFileName} variant="ghost" icon={<Download className="size-4" />}>
+              Download Résumé
+            </CtaLink>
+          </Magnetic>
+          <Magnetic>
+            <CtaLink href={site.calendly} external variant="ghost" icon={<CalendarDays className="size-4" />}>
+              Book a Call
+            </CtaLink>
+          </Magnetic>
+        </div>
       </div>
     </section>
   );

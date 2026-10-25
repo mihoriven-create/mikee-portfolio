@@ -3,6 +3,7 @@
 import { AnimatePresence, motion, useTransform, type MotionValue } from "framer-motion";
 import { ArrowUpRight, CircleDot, Hammer } from "lucide-react";
 import { useId, useState, type KeyboardEvent } from "react";
+import { TiltPanel } from "@/components/ui/TiltPanel";
 import { useMediaQuery } from "@/components/ui/useMediaQuery";
 import { ProjectVisual } from "@/components/visuals/ProjectVisual";
 import { ScreenshotGallery } from "@/components/visuals/ScreenshotGallery";
@@ -52,8 +53,22 @@ export function ProjectCard({ project, index, total, progress }: ProjectCardProp
       <motion.article
         aria-labelledby={`${baseId}-title`}
         style={stacked ? { scale, top: `${index * 28}px` } : undefined}
-        className="relative w-full origin-top rounded-[32px] border-2 border-gold/40 bg-ink p-4 shadow-[0_-20px_60px_-30px_rgba(212,175,55,0.35)] sm:rounded-[44px] sm:p-6 md:rounded-[56px] md:p-8"
+        // Feed the cursor position to the spotlight below via CSS variables (no re-renders).
+        onPointerMove={(e) => {
+          const rect = e.currentTarget.getBoundingClientRect();
+          e.currentTarget.style.setProperty("--mx", `${e.clientX - rect.left}px`);
+          e.currentTarget.style.setProperty("--my", `${e.clientY - rect.top}px`);
+        }}
+        className="group/card relative w-full origin-top rounded-[32px] border-2 border-gold/40 bg-ink p-4 shadow-[0_-20px_60px_-30px_rgba(212,175,55,0.35)] transition-colors duration-500 hover:border-gold/70 sm:rounded-[44px] sm:p-6 md:rounded-[56px] md:p-8"
       >
+        {/* Soft gold spotlight that follows the cursor across the card. */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 transition-opacity duration-500 group-hover/card:opacity-100"
+          style={{
+            background: "radial-gradient(640px circle at var(--mx, 50%) var(--my, 50%), rgba(212, 175, 55, 0.11), transparent 42%)",
+          }}
+        />
         <header className="flex flex-wrap items-start gap-x-6 gap-y-3 border-b border-gold/15 pb-5 md:flex-nowrap md:items-center md:pb-6">
           <span aria-hidden="true" className="gold-text font-display font-black leading-none [font-size:clamp(2.6rem,7vw,100px)]">
             {String(index + 1).padStart(2, "0")}
@@ -148,9 +163,13 @@ export function ProjectCard({ project, index, total, progress }: ProjectCardProp
           </div>
 
           {project.screenshots?.length ? (
-            <ScreenshotGallery images={project.screenshots} label={project.name} />
+            <TiltPanel>
+              <ScreenshotGallery images={project.screenshots} label={project.name} />
+            </TiltPanel>
           ) : (
-            <ProjectVisual kind={project.visual} />
+            <TiltPanel>
+              <ProjectVisual kind={project.visual} />
+            </TiltPanel>
           )}
         </div>
       </motion.article>

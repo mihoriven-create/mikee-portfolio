@@ -1,7 +1,9 @@
 import Image from "next/image";
 import { Briefcase, Layers, MapPin, Wrench } from "lucide-react";
 import { CtaLink } from "@/components/ui/CtaLink";
+import { Magnetic } from "@/components/ui/Magnetic";
 import { FadeIn } from "@/components/ui/FadeIn";
+import { RevealHeading } from "@/components/ui/RevealHeading";
 import { GoldGlyph } from "@/components/visuals/GoldGlyph";
 import { site } from "@/data/site";
 
@@ -51,15 +53,13 @@ export function About() {
               />
             </div>
           </FadeIn>
-          <FadeIn y={40}>
-            <h2
-              id="about-title"
-              className="gold-text text-center font-display font-black uppercase leading-none tracking-tight"
-              style={{ fontSize: "clamp(3rem, 12vw, 160px)" }}
-            >
-              About me
-            </h2>
-          </FadeIn>
+          <RevealHeading
+            id="about-title"
+            text="About me"
+            className="text-center font-display font-black uppercase leading-none tracking-tight"
+            letterClassName="gold-text"
+            style={{ fontSize: "clamp(3rem, 12vw, 160px)" }}
+          />
           <FadeIn y={20}>
             <p className="max-w-[620px] text-center font-display font-medium leading-relaxed text-white [font-size:clamp(1.05rem,2vw,1.4rem)]">
               {about}
@@ -80,12 +80,16 @@ export function About() {
         </ul>
 
         <FadeIn className="flex flex-wrap justify-center gap-3">
-          <CtaLink href="#contact" size="lg">
-            Contact Me
-          </CtaLink>
-          <CtaLink href="#experience" variant="ghost" size="lg">
-            See Experience
-          </CtaLink>
+          <Magnetic>
+            <CtaLink href="#contact" size="lg">
+              Contact Me
+            </CtaLink>
+          </Magnetic>
+          <Magnetic>
+            <CtaLink href="#experience" variant="ghost" size="lg">
+              See Experience
+            </CtaLink>
+          </Magnetic>
         </FadeIn>
       </div>
     </section>

@@ -21,6 +21,10 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: 5rem;
 }
+/* When Lenis smooth scrolling is active it animates the scroll itself; native smoothing would fight it. */
+html.lenis {
+  scroll-behavior: auto;
+}
 
 body {
   background: var(--color-ink);
@@ -92,6 +96,71 @@ body {
   }
 }
 
+/* Hero name: letters rise and come into focus (CSS-only, so it never waits for JavaScript).
+   They start faintly visible rather than hidden, so the browser counts the name as painted
+   from the very first frame — a fully hidden start delays "largest contentful paint" by seconds. */
+@keyframes hero-rise {
+  from {
+    opacity: 0.12;
+    transform: translateY(28%);
+    filter: blur(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+.hero-letter {
+  animation: hero-rise 1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+/* Other above-the-fold hero items: same CSS-only principle, a gentle fade-up. */
+@keyframes hero-fade-up {
+  from {
+    opacity: 0.08;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.hero-fade {
+  animation: hero-fade-up 0.8s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+}
+
+/* Navbar: opacity only — a transform on the fixed header would trap its fixed mobile menu inside it. */
+@keyframes nav-fade-in {
+  from {
+    opacity: 0.08;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.nav-fade {
+  animation: nav-fade-in 0.7s ease-out both;
+}
+
+/* Section titles: letters rise when the heading scrolls into view (class toggled by RevealHeading). */
+.reveal-word {
+  display: inline-block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+  vertical-align: top;
+}
+.reveal-letter {
+  display: inline-block;
+  transform: translateY(110%);
+  transition: transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: calc(var(--i, 0) * 28ms);
+}
+[data-revealed="true"] .reveal-letter {
+  transform: translateY(0);
+}
+
 /* Continuous drift for the tool tiles (one copy's width per loop); pauses while hovered. */
 @keyframes marquee-left {
   from {
@@ -132,7 +201,14 @@ body {
   .animate-float,
   .animate-dash,
   .animate-wave,
-  .marquee-track {
+  .marquee-track,
+  .hero-letter,
+  .hero-fade,
+  .nav-fade {
     animation: none;
+  }
+  .reveal-letter {
+    transform: none;
+    transition: none;
   }
 }

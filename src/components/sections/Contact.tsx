@@ -1,6 +1,7 @@
 import { ArrowUp, ArrowUpRight, CalendarDays, Mail, MapPin, MessageCircle } from "lucide-react";
 import { CopyEmail } from "@/components/ui/EmailConnect";
 import { FadeIn } from "@/components/ui/FadeIn";
+import { RevealPanel } from "@/components/ui/RevealPanel";
 import { mailto, navLinks, site } from "@/data/site";
 
 const channels = [
@@ -11,7 +12,7 @@ const channels = [
 
 export function Contact() {
   return (
-    <section
+    <RevealPanel
       id="contact"
       aria-labelledby="contact-title"
       className="grain relative overflow-hidden rounded-t-[40px] border-t border-gold/20 bg-gradient-to-b from-ink-2 to-ink px-5 pb-10 pt-24 sm:rounded-t-[50px] sm:px-8 md:rounded-t-[60px] md:px-10 md:pt-32"
@@ -87,6 +88,6 @@ export function Contact() {
           </a>
         </footer>
       </div>
-    </section>
+    </RevealPanel>
   );
 }

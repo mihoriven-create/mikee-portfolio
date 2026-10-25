@@ -8,6 +8,7 @@ import { Marquee } from "@/components/sections/Marquee";
 import { Navbar } from "@/components/sections/Navbar";
 import { Projects } from "@/components/sections/Projects";
 import { Testimonials } from "@/components/sections/Testimonials";
+import { SmoothScroll } from "@/components/ui/SmoothScroll";
 import { site, siteUrl } from "@/data/site";
 
 const personJsonLd = {
@@ -28,6 +29,7 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd).replace(/</g, "\\u003c") }}
       />
+      <SmoothScroll />
       <Navbar />
       <main id="main" className="overflow-x-clip bg-ink">
         <Hero />

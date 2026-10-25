@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useScroll, useSpring } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { ContactHeading, EmailOptions, LetsConnect, WhatsAppOptions } from "@/components/ui/EmailConnect";
@@ -10,6 +10,9 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState<string>("");
+  // Reading progress for the thin gold line under the navbar.
+  const { scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, { stiffness: 140, damping: 30, mass: 0.3 });
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -45,22 +48,21 @@ export function Navbar() {
   }, [open]);
 
   return (
-    <motion.header
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
-      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-500 ${
+    <header
+      className={`nav-fade fixed inset-x-0 top-0 z-50 transition-colors duration-500 ${
         scrolled ? "border-b border-gold/15 bg-ink/75 backdrop-blur-xl" : "border-b border-transparent"
       }`}
     >
       <nav aria-label="Primary" className="mx-auto flex max-w-[1600px] items-center justify-between px-5 py-4 sm:px-8 md:px-10">
-        <a href="#top" className="focus-ring group flex items-center gap-3 rounded-full" aria-label={`${site.name} — back to top`}>
+        {/* The link's accessible name comes from its own text, so it always matches what is shown. */}
+        <a href="#top" className="focus-ring group flex items-center gap-3 rounded-full">
           <span className="grid size-10 place-items-center rounded-full border border-gold/60 font-display text-sm font-semibold tracking-wider text-gold transition-colors group-hover:bg-gold group-hover:text-ink">
             MJB
           </span>
           <span className="hidden font-display text-sm font-light uppercase tracking-[0.25em] text-mist lg:inline">
-            Buencamino
+            <span className="sr-only"> </span>Buencamino
           </span>
+          <span className="sr-only">, back to top</span>
         </a>
 
         <ul className="hidden items-center gap-1 md:flex">
@@ -138,6 +140,12 @@ export function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.header>
+
+      <motion.div
+        aria-hidden="true"
+        style={{ scaleX: progress }}
+        className="absolute inset-x-0 bottom-0 h-[2px] origin-left bg-gradient-to-r from-gold-deep via-gold-light to-gold"
+      />
+    </header>
   );
 }

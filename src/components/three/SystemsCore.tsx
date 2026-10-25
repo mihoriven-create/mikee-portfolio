@@ -1,9 +1,8 @@
 "use client";
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useEffect, useMemo, useRef, type PointerEvent as ReactPointerEvent } from "react";
+import { useMemo, useRef, type PointerEvent as ReactPointerEvent } from "react";
 import * as THREE from "three";
-import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 
 const GOLD = new THREE.Color("#d4af37");
 const GOLD_LIGHT = new THREE.Color("#f3d98b");
@@ -58,17 +57,36 @@ function useLayout() {
   return { viewport, scale, y, mobile };
 }
 
-/** Gives metallic materials something to reflect without loading an HDR file. */
-function StudioEnvironment() {
-  const gl = useThree((s) => s.gl);
-  const env = useMemo(() => {
-    const pmrem = new THREE.PMREMGenerator(gl);
-    const texture = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
-    pmrem.dispose();
-    return texture;
-  }, [gl]);
-  useEffect(() => () => env.dispose(), [env]);
-  return <primitive object={env} attach="environment" />;
+let goldMatcap: THREE.CanvasTexture | null = null;
+
+/**
+ * A baked "studio-lit gold" sphere painted on a small canvas. Matcap materials read their shading from it,
+ * so the orb looks metallic without real-time lights or an environment map (which cost seconds of
+ * shader compilation and pre-filtering on mobile CPUs).
+ */
+function getGoldMatcap() {
+  if (goldMatcap) return goldMatcap;
+  const size = 256;
+  const canvas = document.createElement("canvas");
+  canvas.width = canvas.height = size;
+  const ctx = canvas.getContext("2d")!;
+  const body = ctx.createRadialGradient(size * 0.36, size * 0.3, size * 0.02, size * 0.5, size * 0.5, size * 0.52);
+  body.addColorStop(0, "#fffbe8");
+  body.addColorStop(0.16, "#f7e3a1");
+  body.addColorStop(0.42, "#d4af37");
+  body.addColorStop(0.72, "#8c6a22");
+  body.addColorStop(1, "#24190a");
+  ctx.fillStyle = body;
+  ctx.fillRect(0, 0, size, size);
+  // Warm rim light from the lower right.
+  const rim = ctx.createRadialGradient(size * 0.78, size * 0.8, 0, size * 0.78, size * 0.8, size * 0.35);
+  rim.addColorStop(0, "rgba(243,217,139,0.55)");
+  rim.addColorStop(1, "rgba(243,217,139,0)");
+  ctx.fillStyle = rim;
+  ctx.fillRect(0, 0, size, size);
+  goldMatcap = new THREE.CanvasTexture(canvas);
+  goldMatcap.colorSpace = THREE.SRGBColorSpace;
+  return goldMatcap;
 }
 
 /** Gold dust spread across the whole hero: drifts, parts around the cursor, ripples with each shockwave. */
@@ -191,6 +209,7 @@ function Shockwave() {
 /** An orbit ring with integration "nodes" travelling along it; speeds up while boosted. */
 function Orbit({ radius, tilt, speed, nodes }: { radius: number; tilt: [number, number, number]; speed: number; nodes: number }) {
   const group = useRef<THREE.Group>(null);
+  const matcap = useMemo(() => getGoldMatcap(), []);
   const positions = useMemo(
     () =>
       Array.from({ length: nodes }, (_, i) => {
@@ -214,8 +233,8 @@ function Orbit({ radius, tilt, speed, nodes }: { radius: number; tilt: [number, 
       <group ref={group}>
         {positions.map((p, i) => (
           <mesh key={i} position={p}>
-            <sphereGeometry args={[0.055, 20, 20]} />
-            <meshStandardMaterial color={GOLD_LIGHT} emissive={GOLD} emissiveIntensity={0.6} metalness={1} roughness={0.2} />
+            <sphereGeometry args={[0.055, 16, 16]} />
+            <meshMatcapMaterial matcap={matcap} color={GOLD_LIGHT} />
           </mesh>
         ))}
       </group>
@@ -228,8 +247,9 @@ function Core({ animate }: { animate: boolean }) {
   const tilt = useRef<THREE.Group>(null);
   const spin = useRef<THREE.Group>(null);
   const inner = useRef<THREE.Mesh>(null);
-  const innerMat = useRef<THREE.MeshStandardMaterial>(null);
+  const innerMat = useRef<THREE.MeshMatcapMaterial>(null);
   const shell = useRef<THREE.Mesh>(null);
+  const matcap = useMemo(() => getGoldMatcap(), []);
 
   useFrame(({ pointer }, delta) => {
     const s = interaction;
@@ -258,11 +278,9 @@ function Core({ animate }: { animate: boolean }) {
     // Hover grows and brightens the core; a click adds a short flash.
     const targetScale = (s.hovered ? 1.14 : 1) + s.boost * 0.15;
     inner.current.scale.setScalar(THREE.MathUtils.lerp(inner.current.scale.x, targetScale, 0.12));
-    innerMat.current.emissiveIntensity = THREE.MathUtils.lerp(
-      innerMat.current.emissiveIntensity,
-      (s.hovered ? 0.35 : 0.08) + s.boost * 0.9,
-      0.15,
-    );
+    // Matcap colour multiplies the baked shading; values above 1 brighten it into a glow.
+    const glow = THREE.MathUtils.lerp(innerMat.current.color.r, (s.hovered ? 1.3 : 1) + s.boost * 0.6, 0.15);
+    innerMat.current.color.setScalar(glow);
     s.boost = Math.max(0, s.boost - delta * 0.8);
   });
 
@@ -272,16 +290,7 @@ function Core({ animate }: { animate: boolean }) {
         <group ref={spin}>
           <mesh ref={inner} onPointerOver={() => (interaction.hovered = true)} onPointerOut={() => (interaction.hovered = false)}>
             <icosahedronGeometry args={[1, 1]} />
-            <meshStandardMaterial
-              ref={innerMat}
-              color={GOLD}
-              emissive={GOLD}
-              emissiveIntensity={0.08}
-              metalness={1}
-              roughness={0.18}
-              flatShading
-              envMapIntensity={1.4}
-            />
+            <meshMatcapMaterial ref={innerMat} matcap={matcap} flatShading />
           </mesh>
           <mesh ref={shell} scale={1.45}>
             <icosahedronGeometry args={[1, 2]} />
@@ -300,7 +309,7 @@ function Core({ animate }: { animate: boolean }) {
   );
 }
 
-export default function SystemsCore({ animate = true }: { animate?: boolean }) {
+export default function SystemsCore({ animate = true, onReady }: { animate?: boolean; onReady?: () => void }) {
   const container = useRef<HTMLDivElement>(null);
 
   const setCursor = (c: string) => container.current && (container.current.style.cursor = c);
@@ -354,15 +363,13 @@ export default function SystemsCore({ animate = true }: { animate?: boolean }) {
       aria-hidden="true"
     >
       <Canvas
-        dpr={[1, 1.75]}
+        dpr={[1, 1.5]}
         camera={{ position: [0, 0, 10], fov: 42 }}
         gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
         frameloop={animate ? "always" : "demand"}
+        onCreated={() => onReady?.()}
       >
-        <StudioEnvironment />
-        <ambientLight intensity={0.25} />
-        <directionalLight position={[3, 4, 5]} intensity={2.2} color="#fff3d1" />
-        <pointLight position={[-4, -2, 2]} intensity={18} color="#d4af37" />
+        {/* No lights needed: matcap and basic materials carry their own shading. */}
         <GoldField animate={animate} />
         <Core animate={animate} />
         <Shockwave />
