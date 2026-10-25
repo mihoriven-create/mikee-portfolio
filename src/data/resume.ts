@@ -38,5 +38,5 @@ export const references: { name: string; role: string; company?: string; phone: 
   { name: "Sky Evangelista", role: "Operations Manager", phone: "+63 945 775 6673", email: "sky.mtsd@gmail.com" },
 ];
 
-// Until the new site is deployed, the résumé points to the existing Wix portfolio.
-export const fallbackPortfolioUrl = "https://mikeecamino.wixsite.com/mikeeghl";
+// Used for the résumé's Portfolio link when the PDF is exported from a local build.
+export const fallbackPortfolioUrl = "https://mikee-portfolio-sepia.vercel.app";

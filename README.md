@@ -74,4 +74,4 @@ npm run start            # leave running, then in a second terminal:
 npm run resume:pdf
 ```
 
-This needs Google Chrome or Microsoft Edge installed (or set `CHROME_PATH`). The résumé's *Portfolio* link points to the Wix site until the new site has a public address; after deploying, set `NEXT_PUBLIC_SITE_URL` locally (or in `.env.local`), rebuild, and run `npm run resume:pdf` again so the link points to the new site. Commit and push the updated PDF.
+This needs Google Chrome or Microsoft Edge installed (or set `CHROME_PATH`). The résumé's *Portfolio* link points to the live site, https://mikee-portfolio-sepia.vercel.app (set as `fallbackPortfolioUrl` in `src/data/resume.ts`). If you move to a custom domain, change it there, rebuild, run `npm run resume:pdf` again, then commit and push the updated PDF.
