@@ -1,14 +1,8 @@
-"use client";
-
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { ArrowDown, ArrowUpRight, CalendarDays, Download } from "lucide-react";
-import { useRef } from "react";
 import { HeroVisual } from "@/components/three/HeroVisual";
 import { CtaLink } from "@/components/ui/CtaLink";
 import { Magnetic } from "@/components/ui/Magnetic";
 import { site } from "@/data/site";
-
-const ease = [0.25, 0.1, 0.25, 1] as const;
 
 type SplitLettersProps = { text: string; delay: number; className?: string; letterClassName?: string };
 
@@ -31,18 +25,11 @@ function SplitLetters({ text, delay, className, letterClassName = "" }: SplitLet
   );
 }
 
+// The hero is deliberately static: it does not move, fade or shrink as you scroll.
 export function Hero() {
-  const ref = useRef<HTMLElement>(null);
-  const reduced = useReducedMotion();
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const headingY = useTransform(scrollYProgress, [0, 1], [0, reduced ? 0 : 140]);
-  const visualScale = useTransform(scrollYProgress, [0, 1], [1, reduced ? 1 : 0.8]);
-  const fade = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
-
   return (
     <section
       id="top"
-      ref={ref}
       aria-label="Introduction"
       className="grain relative flex h-svh min-h-[720px] flex-col overflow-x-clip pt-24 sm:pt-28"
     >
@@ -52,7 +39,7 @@ export function Hero() {
         <div className="absolute inset-0 bg-[linear-gradient(rgba(212,175,55,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(212,175,55,0.05)_1px,transparent_1px)] bg-[size:72px_72px] [mask-image:radial-gradient(ellipse_at_center,black_20%,transparent_70%)]" />
       </div>
 
-      <motion.div style={{ y: headingY, opacity: fade }} className="pointer-events-none relative z-10 px-3 sm:px-6">
+      <div className="pointer-events-none relative z-10 px-3 sm:px-6">
         <div className="hero-fade" style={{ animationDelay: "0.1s" }}>
           <p className="mb-2 text-center font-display text-xs font-medium uppercase tracking-[0.45em] text-gold sm:text-sm">
             {site.title}
@@ -72,19 +59,13 @@ export function Hero() {
             letterClassName="gold-text"
           />
         </h1>
-      </motion.div>
+      </div>
 
       {/* 3D scene covers the whole hero so its effects (gold dust, shockwaves) use the full screen.
           Text layers above it ignore the pointer; only their links and buttons take clicks. */}
-      <motion.div
-        style={{ scale: visualScale }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.4, delay: 0.5, ease }}
-        className="absolute inset-0 z-0"
-      >
+      <div className="nav-fade absolute inset-0 z-0" style={{ animationDelay: "0.4s" }}>
         <HeroVisual />
-      </motion.div>
+      </div>
 
       {/* Spacer that keeps the actions at the bottom; the orb is centered in this space. */}
       <div className="min-h-[260px] flex-1" aria-hidden="true" />

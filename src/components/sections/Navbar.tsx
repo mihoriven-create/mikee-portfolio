@@ -48,6 +48,7 @@ export function Navbar() {
   }, [open]);
 
   return (
+    <>
     <header
       className={`nav-fade fixed inset-x-0 top-0 z-50 transition-colors duration-500 ${
         scrolled ? "border-b border-gold/15 bg-ink/75 backdrop-blur-xl" : "border-b border-transparent"
@@ -101,6 +102,13 @@ export function Navbar() {
         </div>
       </nav>
 
+      <motion.div
+        aria-hidden="true"
+        style={{ scaleX: progress }}
+        className="absolute inset-x-0 bottom-0 h-[2px] origin-left bg-gradient-to-r from-gold-deep via-gold-light to-gold"
+      />
+    </header>
+
       <AnimatePresence>
         {open && (
           <motion.div
@@ -141,11 +149,6 @@ export function Navbar() {
         )}
       </AnimatePresence>
 
-      <motion.div
-        aria-hidden="true"
-        style={{ scaleX: progress }}
-        className="absolute inset-x-0 bottom-0 h-[2px] origin-left bg-gradient-to-r from-gold-deep via-gold-light to-gold"
-      />
-    </header>
+    </>
   );
 }
