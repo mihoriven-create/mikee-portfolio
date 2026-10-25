@@ -21,7 +21,7 @@ export function TiltPanel({ children, className = "" }: { children: ReactNode; c
   const glareOpacity = useSpring(0, { stiffness: 120, damping: 20 });
   const glare = useMotionTemplate`radial-gradient(520px circle at ${glareX}% ${glareY}%, rgba(255, 240, 200, 0.16), transparent 45%)`;
 
-  if (reduced || !finePointer) return <div className={`h-full ${className}`}>{children}</div>;
+  if (reduced || !finePointer) return <div className={`h-full min-w-0 ${className}`}>{children}</div>;
 
   const onPointerMove = (e: PointerEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -45,7 +45,7 @@ export function TiltPanel({ children, className = "" }: { children: ReactNode; c
       onPointerMove={onPointerMove}
       onPointerLeave={onPointerLeave}
       style={{ rotateX, rotateY, transformPerspective: 1100 }}
-      className={`relative h-full will-change-transform ${className}`}
+      className={`relative h-full min-w-0 will-change-transform ${className}`}
     >
       {children}
       <motion.div

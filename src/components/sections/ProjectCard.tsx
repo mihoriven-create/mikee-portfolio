@@ -95,17 +95,17 @@ export function ProjectCard({ project, index, total, progress }: ProjectCardProp
           )}
         </header>
 
-        <div className="grid gap-5 pt-5 md:grid-cols-[0.95fr_1.05fr] md:gap-8 md:pt-6">
-          <div className="flex flex-col gap-5">
+        {/* minmax(0, …) stops wide content (e.g. a long thumbnail strip) from squeezing the text column. */}
+        <div className="grid gap-5 pt-5 md:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] md:gap-8 md:pt-6">
+          <div className="flex min-w-0 flex-col gap-5">
             <p className="leading-relaxed text-mist [font-size:clamp(0.95rem,1.25vw,1.1rem)]">{project.summary}</p>
 
             <div
               role="tablist"
               aria-label={`${project.name} case study`}
               onKeyDown={onKeyDown}
-              className={`grid gap-1.5 rounded-3xl border border-gold/15 bg-ink-2 p-1.5 ${
-                project.steps.length > 2 ? "grid-cols-2 xl:grid-cols-4" : "grid-cols-2"
-              }`}
+              // Tabs size to their labels and wrap onto a second row when space runs out — never overlap.
+              className="flex flex-wrap gap-1.5 rounded-3xl border border-gold/15 bg-ink-2 p-1.5"
             >
               {project.steps.map((s, i) => (
                 <button
@@ -117,7 +117,7 @@ export function ProjectCard({ project, index, total, progress }: ProjectCardProp
                   aria-controls={`${baseId}-panel`}
                   tabIndex={tab === i ? 0 : -1}
                   onClick={() => setTab(i)}
-                  className={`focus-ring relative rounded-full px-3 py-2 font-display text-[0.65rem] font-medium uppercase tracking-[0.15em] transition-colors sm:text-xs ${
+                  className={`focus-ring relative flex-auto whitespace-nowrap rounded-full px-3 py-2 font-display text-[0.65rem] font-medium uppercase tracking-[0.12em] transition-colors sm:text-xs ${
                     tab === i ? "text-ink" : "text-mist hover:text-gold-light"
                   }`}
                 >
