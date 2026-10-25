@@ -60,25 +60,25 @@ export function Navbar() {
           <span className="grid size-10 place-items-center rounded-full border border-gold/60 font-display text-sm font-semibold tracking-wider text-gold transition-colors group-hover:bg-gold group-hover:text-ink">
             MJB
           </span>
-          <span className="hidden font-display text-sm font-light uppercase tracking-[0.25em] text-mist lg:inline">
-            <span className="sr-only"> </span>Buencamino
+          <span className="font-display text-[0.66rem] font-medium uppercase tracking-[0.08em] text-ivory min-[420px]:text-[0.8rem] min-[420px]:tracking-[0.18em] min-[1100px]:text-[0.72rem] min-[1100px]:tracking-[0.12em] xl:text-[0.8rem] xl:tracking-[0.18em]">
+            <span className="sr-only"> </span>Michael John Buencamino
           </span>
           <span className="sr-only">, back to top</span>
         </a>
 
-        <ul className="hidden items-center gap-1 md:flex">
+        <ul className="hidden items-center gap-0.5 min-[1100px]:flex xl:gap-1">
           {navLinks.map((link) => (
             <li key={link.href}>
               <a
                 href={link.href}
                 aria-current={active === link.href ? "true" : undefined}
-                className={`focus-ring relative rounded-full px-4 py-2 font-display text-sm font-medium uppercase tracking-wider transition-colors duration-200 hover:text-gold-light ${
+                className={`focus-ring relative rounded-full px-2.5 py-2 font-display text-[0.8rem] font-medium uppercase tracking-wider xl:px-4 xl:text-sm transition-colors duration-200 hover:text-gold-light ${
                   active === link.href ? "text-gold-light" : "text-mist"
                 }`}
               >
                 {link.label}
                 {active === link.href && (
-                  <motion.span layoutId="nav-dot" className="absolute inset-x-4 -bottom-0.5 h-px bg-gold" />
+                  <motion.span layoutId="nav-dot" className="absolute inset-x-2.5 -bottom-0.5 h-px bg-gold xl:inset-x-4" />
                 )}
               </a>
             </li>
@@ -95,7 +95,7 @@ export function Navbar() {
             aria-expanded={open}
             aria-controls="mobile-menu"
             aria-label={open ? "Close menu" : "Open menu"}
-            className="focus-ring grid size-11 place-items-center rounded-full border border-gold/40 text-gold-light md:hidden"
+            className="focus-ring grid size-11 place-items-center rounded-full border border-gold/40 text-gold-light min-[1100px]:hidden"
           >
             {open ? <X className="size-5" /> : <Menu className="size-5" />}
           </button>
@@ -116,7 +116,7 @@ export function Navbar() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-x-0 bottom-0 top-[76px] z-40 overflow-y-auto bg-ink/95 pb-10 backdrop-blur-xl md:hidden"
+            className="fixed inset-x-0 bottom-0 top-[76px] z-40 overflow-y-auto bg-ink/95 pb-10 backdrop-blur-xl min-[1100px]:hidden"
           >
             <ul className="flex flex-col gap-2 px-6 pt-8">
               {navLinks.map((link, i) => (

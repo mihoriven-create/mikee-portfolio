@@ -1,6 +1,5 @@
 import { ArrowUp, ArrowUpRight, CalendarDays, Mail, MapPin, MessageCircle } from "lucide-react";
 import { OpenContactFormButton } from "@/components/ui/ContactForm";
-import { CopyEmail } from "@/components/ui/EmailConnect";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { RevealPanel } from "@/components/ui/RevealPanel";
 import { navLinks, site } from "@/data/site";
@@ -80,7 +79,9 @@ export function Contact() {
         </ul>
 
         <FadeIn className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
-          <CopyEmail />
+          <span className="inline-flex items-center gap-2 text-sm text-mist/80">
+            <Mail className="size-4 text-gold" aria-hidden="true" /> {site.email}
+          </span>
           <span className="inline-flex items-center gap-2 text-sm text-mist/80">
             <MapPin className="size-4 text-gold" aria-hidden="true" /> {site.location}
           </span>

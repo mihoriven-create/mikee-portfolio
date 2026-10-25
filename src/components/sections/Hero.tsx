@@ -63,7 +63,7 @@ export function Hero() {
 
       {/* 3D scene covers the whole hero so its effects (gold dust, shockwaves) use the full screen.
           Text layers above it ignore the pointer; only their links and buttons take clicks. */}
-      <div className="nav-fade absolute inset-0 z-0" style={{ animationDelay: "0.4s" }}>
+      <div className="nav-fade absolute inset-0 z-0">
         <HeroVisual />
       </div>
 
@@ -73,7 +73,7 @@ export function Hero() {
       <div className="pointer-events-none relative z-20 flex flex-col gap-6 px-5 pb-7 sm:px-8 sm:pb-8 md:flex-row md:items-end md:justify-between md:px-10 md:pb-10 [&_a]:pointer-events-auto">
         <div className="hero-fade max-w-[300px] md:max-w-[340px]" style={{ animationDelay: "0.35s" }}>
           <p className="font-display font-light uppercase leading-snug tracking-wide text-mist [font-size:clamp(0.8rem,1.25vw,1.15rem)]">
-            Building reliable CRM systems, automations, and integrations for US-based businesses.
+            Building reliable CRM systems, automations, and integrations for businesses.
           </p>
           <a
             href="#projects"

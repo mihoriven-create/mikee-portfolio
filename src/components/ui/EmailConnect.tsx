@@ -143,22 +143,3 @@ export function LetsConnect() {
     </div>
   );
 }
-
-/** Inline email address with a copy button (used in the Contact section). */
-export function CopyEmail() {
-  const { copied, copy } = useCopy();
-  return (
-    <span className="inline-flex items-center gap-2 text-sm text-mist/80">
-      <Mail className="size-4 text-gold" aria-hidden="true" />
-      <span className="select-all">{site.email}</span>
-      <button
-        type="button"
-        onClick={copy}
-        className="focus-ring inline-flex items-center gap-1 rounded-full border border-gold/30 px-2.5 py-1 text-xs text-gold-light transition-colors hover:bg-gold hover:text-ink"
-      >
-        {copied ? <Check className="size-3" aria-hidden="true" /> : <Copy className="size-3" aria-hidden="true" />}
-        <span aria-live="polite">{copied ? "Copied" : "Copy"}</span>
-      </button>
-    </span>
-  );
-}

@@ -30,6 +30,7 @@ export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
     : "http://localhost:3000";
 
 export const navLinks = [
+  { href: "#top", label: "Home" },
   { href: "#about", label: "About" },
   { href: "#expertise", label: "Expertise" },
   { href: "#projects", label: "Projects" },

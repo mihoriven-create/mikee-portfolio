@@ -44,8 +44,8 @@ export function HeroVisual() {
     const startedAt = performance.now();
     let lastInput = 0;
 
-    // Even while idle, creating the scene is a short stall — so don't do it while the visitor is
-    // actively moving, clicking or scrolling. Wait for a calm moment (but never longer than 15 s).
+    // Even while idle, creating the scene is a short stall — so avoid doing it while the visitor is
+    // actively moving, clicking or scrolling. Wait for a brief calm moment, but never longer than 4 s.
     const markInput = () => {
       lastInput = performance.now();
     };
@@ -54,9 +54,9 @@ export function HeroVisual() {
 
     const whenCalm = (task: () => void) => {
       if (cancelled) return;
-      const busy = performance.now() - lastInput < 1500;
-      if (busy && performance.now() - startedAt < 15000) {
-        calmTimer = setTimeout(() => whenCalm(task), 500);
+      const busy = performance.now() - lastInput < 600;
+      if (busy && performance.now() - startedAt < 4000) {
+        calmTimer = setTimeout(() => whenCalm(task), 200);
         return;
       }
       task();
@@ -68,10 +68,10 @@ export function HeroVisual() {
         whenCalm(() => {
           loadSystemsCore().then(() => {
             if (cancelled) return;
-            cancelStep = whenIdle(() => whenCalm(() => setReady(true)), 2000);
+            cancelStep = whenIdle(() => whenCalm(() => setReady(true)), 150);
           });
         });
-      }, 3000);
+      }, 250);
     };
 
     if (document.readyState === "complete") begin();
@@ -94,7 +94,7 @@ export function HeroVisual() {
         className="absolute left-1/2 top-[55%] size-[min(70vw,46vh)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(212,175,55,0.45)_0%,rgba(212,175,55,0.08)_45%,transparent_70%)] blur-2xl"
       />
       {ready && (
-        <div className={`absolute inset-0 transition-opacity duration-1000 ${shown ? "opacity-100" : "opacity-0"}`}>
+        <div className={`absolute inset-0 transition-opacity duration-700 ${shown ? "opacity-100" : "opacity-0"}`}>
           <SystemsCore animate={!reduced} onReady={() => setShown(true)} />
         </div>
       )}
