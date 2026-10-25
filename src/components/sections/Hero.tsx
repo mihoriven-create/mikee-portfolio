@@ -63,7 +63,7 @@ export function Hero() {
 
       {/* 3D scene covers the whole hero so its effects (gold dust, shockwaves) use the full screen.
           Text layers above it ignore the pointer; only their links and buttons take clicks. */}
-      <div className="nav-fade absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0">
         <HeroVisual />
       </div>
 

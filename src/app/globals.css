@@ -212,3 +212,25 @@ body {
     transition: none;
   }
 }
+
+/* The pre-rendered hero orb (public/orb-poster.webp). It must sit exactly where the live 3D orb sits:
+   the scene centres the orb ~8.5% below the middle (3% on phones) and sizes it from min(12.5% of the
+   hero's height, 20% of its width) (phones: 15% / 17%). The picture shows 6.4 orb-radii across. */
+.orb-poster {
+  position: absolute;
+  left: 50%;
+  top: 58.5%;
+  width: calc(6.4 * min(12.5cqh, 20cqw));
+  height: auto;
+  aspect-ratio: 1;
+  max-width: none;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  user-select: none;
+}
+@media (max-width: 639px) {
+  .orb-poster {
+    top: 53%;
+    width: calc(6.4 * min(15cqh, 17cqw));
+  }
+}

@@ -1,13 +1,32 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import { useReducedMotion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 
 const loadSystemsCore = () => import("./SystemsCore");
 
 // three.js stays out of the initial bundle and only loads in the browser.
 const SystemsCore = dynamic(loadSystemsCore, { ssr: false });
+
+/** Reads a browser-only fact without a hydration mismatch (the server always sees `false`). */
+function useBrowserFlag(read: () => boolean) {
+  return useSyncExternalStore(
+    () => () => {},
+    read,
+    () => false,
+  );
+}
+
+// ?orb-poster renders just the orb on a transparent page, to produce public/orb-poster.webp.
+const isPosterCapture = () => new URLSearchParams(window.location.search).has("orb-poster");
+
+// Visitors on data-saver mode or a 2G connection keep the picture and skip the heavy 3D download.
+const wantsLightPage = () => {
+  const connection = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
+  return !!connection && (connection.saveData === true || /(^|-)2g$/.test(connection.effectiveType ?? ""));
+};
 
 function supportsWebGL() {
   try {
@@ -28,16 +47,27 @@ function whenIdle(task: () => void, timeout: number) {
   return () => clearTimeout(id);
 }
 
+/**
+ * The hero orb. A pre-rendered picture of it is part of the page, so it appears with the first paint.
+ * The live 3D scene (a large download) loads afterwards and fades in over the picture.
+ */
 export function HeroVisual() {
   const reduced = useReducedMotion();
+  const capture = useBrowserFlag(isPosterCapture);
+  const lightPage = useBrowserFlag(wantsLightPage);
   const [ready, setReady] = useState(false);
   const [shown, setShown] = useState(false);
+
+  // Reduced-motion and data-saver visitors never need the live scene: the picture is the orb.
+  const skipLive = !!reduced || lightPage;
+  const showLive = capture || (ready && !skipLive);
+  const liveVisible = capture || shown;
 
   // The 3D scene is the heaviest thing on the page. It must never start because of a click or scroll
   // (that froze the page for about a second on slower computers), so it loads on its own once the page
   // has settled, in two separate idle steps: first download and evaluate the code, then create the scene.
   useEffect(() => {
-    if (!supportsWebGL()) return;
+    if (capture || skipLive || !supportsWebGL()) return;
     let cancelStep: (() => void) | undefined;
     let calmTimer: ReturnType<typeof setTimeout> | undefined;
     let cancelled = false;
@@ -84,18 +114,36 @@ export function HeroVisual() {
       cancelStep?.();
       if (calmTimer !== undefined) clearTimeout(calmTimer);
     };
-  }, []);
+  }, [capture, skipLive]);
 
   return (
-    <div className="relative size-full">
-      {/* Static glow doubles as the placeholder before the scene starts and the fallback without WebGL. */}
-      <div
-        aria-hidden="true"
-        className="absolute left-1/2 top-[55%] size-[min(70vw,46vh)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(212,175,55,0.45)_0%,rgba(212,175,55,0.08)_45%,transparent_70%)] blur-2xl"
-      />
-      {ready && (
-        <div className={`absolute inset-0 transition-opacity duration-700 ${shown ? "opacity-100" : "opacity-0"}`}>
-          <SystemsCore animate={!reduced} onReady={() => setShown(true)} />
+    <div className="relative size-full" style={{ containerType: "size" }}>
+      {/* Soft glow behind the picture; also the fallback if images or WebGL are unavailable. */}
+      {!capture && (
+        <div
+          aria-hidden="true"
+          className="absolute left-1/2 top-[58%] size-[min(70vw,46vh)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(212,175,55,0.45)_0%,rgba(212,175,55,0.08)_45%,transparent_70%)] blur-2xl"
+        />
+      )}
+      {/* The pre-rendered orb: in the page from the first byte, sized and placed exactly like the live one. */}
+      {!capture && (
+        <Image
+          src="/orb-poster.webp"
+          alt=""
+          width={900}
+          height={900}
+          fetchPriority="high"
+          loading="eager"
+          unoptimized
+          draggable={false}
+          data-orb-poster
+          aria-hidden="true"
+          className={`orb-poster transition-opacity duration-700 ${liveVisible ? "opacity-0" : "opacity-100"}`}
+        />
+      )}
+      {showLive && (
+        <div className={`absolute inset-0 transition-opacity duration-700 ${liveVisible ? "opacity-100" : "opacity-0"}`}>
+          <SystemsCore animate={!reduced && !capture} poster={capture} onReady={() => setShown(true)} />
         </div>
       )}
     </div>

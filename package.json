@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "resume:pdf": "node scripts/export-resume.mjs"
+    "resume:pdf": "node scripts/export-resume.mjs",
+    "orb:poster": "node scripts/export-orb-poster.mjs"
   },
   "dependencies": {
     "@react-three/fiber": "^9.8.2",

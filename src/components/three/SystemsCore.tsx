@@ -242,7 +242,7 @@ function Orbit({ radius, tilt, speed, nodes }: { radius: number; tilt: [number, 
   );
 }
 
-function Core({ animate }: { animate: boolean }) {
+function Core({ animate, poster }: { animate: boolean; poster: boolean }) {
   const { scale, y } = useLayout();
   const tilt = useRef<THREE.Group>(null);
   const spin = useRef<THREE.Group>(null);
@@ -287,7 +287,7 @@ function Core({ animate }: { animate: boolean }) {
   return (
     <group position={[0, y, 0]} scale={scale}>
       <group ref={tilt}>
-        <group ref={spin}>
+        <group ref={spin} rotation={poster ? [0.32, 0.62, 0] : undefined}>
           <mesh ref={inner} onPointerOver={() => (interaction.hovered = true)} onPointerOut={() => (interaction.hovered = false)}>
             <icosahedronGeometry args={[1, 1]} />
             <meshMatcapMaterial ref={innerMat} matcap={matcap} flatShading />
@@ -297,7 +297,7 @@ function Core({ animate }: { animate: boolean }) {
             <meshBasicMaterial color={GOLD_LIGHT} wireframe transparent opacity={0.12} />
           </mesh>
           <Orbit radius={2.05} tilt={[1.2, 0.2, 0]} speed={animate ? 0.35 : 0} nodes={5} />
-          {animate && (
+          {(animate || poster) && (
             <>
               <Orbit radius={2.45} tilt={[-0.9, 0.6, 0.3]} speed={-0.22} nodes={7} />
               <Orbit radius={1.75} tilt={[0.3, -1.1, 0]} speed={0.5} nodes={3} />
@@ -309,7 +309,19 @@ function Core({ animate }: { animate: boolean }) {
   );
 }
 
-export default function SystemsCore({ animate = true, onReady }: { animate?: boolean; onReady?: () => void }) {
+/**
+ * `poster` renders only the orb and its rings in one fixed pose (no dust, no click ring). It is used
+ * to produce the still image shown while the live scene loads — see scripts/export-orb-poster.mjs.
+ */
+export default function SystemsCore({
+  animate = true,
+  onReady,
+  poster = false,
+}: {
+  animate?: boolean;
+  onReady?: () => void;
+  poster?: boolean;
+}) {
   const container = useRef<HTMLDivElement>(null);
 
   const setCursor = (c: string) => container.current && (container.current.style.cursor = c);
@@ -370,9 +382,9 @@ export default function SystemsCore({ animate = true, onReady }: { animate?: boo
         onCreated={() => onReady?.()}
       >
         {/* No lights needed: matcap and basic materials carry their own shading. */}
-        <GoldField animate={animate} />
-        <Core animate={animate} />
-        <Shockwave />
+        {!poster && <GoldField animate={animate} />}
+        <Core animate={animate} poster={poster} />
+        {!poster && <Shockwave />}
       </Canvas>
     </div>
   );

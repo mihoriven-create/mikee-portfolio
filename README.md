@@ -75,3 +75,15 @@ npm run resume:pdf
 ```
 
 This needs Google Chrome or Microsoft Edge installed (or set `CHROME_PATH`). The résumé's *Portfolio* link points to the live site, https://michaeljohnbuencamino.vercel.app (set as `productionUrl` in `src/data/site.ts`, which also drives the SEO metadata and sitemap). If you move to a custom domain, change it there, rebuild, run `npm run resume:pdf` again, then commit and push the updated PDF.
+
+## The hero orb picture
+
+The orb in the hero is a pre-rendered picture (`public/orb-poster.webp`) that appears with the very first paint. The live 3D scene downloads afterwards and fades in over it; visitors on data-saver, 2G or reduced-motion skip the live scene and keep the picture. If you ever change how the orb looks (`src/components/three/SystemsCore.tsx`), regenerate the picture so the two match:
+
+```bash
+npm run build
+npm run start            # leave running, then in a second terminal:
+npm run orb:poster
+```
+
+Commit the updated `public/orb-poster.webp`. It is rendered from the real scene (`?orb-poster` mode) at a fixed size, and positioned in CSS by `.orb-poster` in `src/app/globals.css`; if you change where the orb sits in the hero, update both.
