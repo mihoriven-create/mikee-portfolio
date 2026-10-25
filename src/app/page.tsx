@@ -17,7 +17,7 @@ const personJsonLd = {
   jobTitle: site.title,
   email: `mailto:${site.email}`,
   url: siteUrl,
-  address: { "@type": "PostalAddress", addressLocality: "Pototan, Iloilo", addressCountry: "PH" },
+  address: { "@type": "PostalAddress", addressLocality: "Iloilo", addressCountry: "PH" },
   knowsAbout: ["CRM Administration", "Workflow Automation", "GoHighLevel", "Conversation AI", "API Integrations", "Webhooks"],
 };
 

@@ -5,7 +5,7 @@ export const site = {
   tagline: "CRM Systems • Workflow Automation • System Integrations • Backend Operations",
   summary:
     "CRM & Technical Operations Specialist with experience supporting US-based businesses by managing CRM systems, workflow automations, and backend operations.",
-  location: "Pototan, Iloilo, Philippines",
+  location: "Iloilo, Philippines",
   email: "mikeecamino@gmail.com",
   phoneDisplay: "+63 956 214 5204",
   phoneTel: "+639562145204",

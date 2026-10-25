@@ -61,7 +61,7 @@ export default function ResumePage() {
             <li>
               <a href={site.linkedin}>LinkedIn</a> · <a href={productionUrl}>Portfolio</a>
             </li>
-            <li>{site.location} 5001</li>
+            <li>{site.location}</li>
           </ul>
         </header>
 
