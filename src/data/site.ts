@@ -18,10 +18,15 @@ export const site = {
 
 export const mailto = `mailto:${site.email}?subject=${encodeURIComponent("Hello Michael — from your portfolio")}`;
 
+// The public address of the site. Used for SEO metadata, the sitemap, and the résumé's Portfolio link.
+export const productionUrl = "https://mikeecamino.vercel.app";
+
+// Every Vercel build (production and previews) points search engines at the production address;
+// local builds use localhost. NEXT_PUBLIC_SITE_URL overrides both.
 export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
   ? process.env.NEXT_PUBLIC_SITE_URL
-  : process.env.VERCEL_PROJECT_PRODUCTION_URL
-    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  : process.env.VERCEL
+    ? productionUrl
     : "http://localhost:3000";
 
 export const navLinks = [

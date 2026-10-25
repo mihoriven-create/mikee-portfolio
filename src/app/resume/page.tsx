@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { education, experience, type Role } from "@/data/experience";
 import { projects } from "@/data/projects";
-import { coreCompetencies, fallbackPortfolioUrl, references, resumeSummary, technicalSkills } from "@/data/resume";
-import { site, siteUrl } from "@/data/site";
+import { coreCompetencies, references, resumeSummary, technicalSkills } from "@/data/resume";
+import { productionUrl, site } from "@/data/site";
 import "./resume.css";
 
 // The printable source for the downloadable PDF (exported with `npm run resume:pdf`).
@@ -12,7 +12,6 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-const portfolioUrl = siteUrl.startsWith("http://localhost") ? fallbackPortfolioUrl : siteUrl;
 
 function Heading({ children }: { children: ReactNode }) {
   return <h2 className="r-heading">{children}</h2>;
@@ -60,7 +59,7 @@ export default function ResumePage() {
               <a href={site.whatsapp}>{site.phoneDisplay} (WhatsApp)</a>
             </li>
             <li>
-              <a href={site.linkedin}>LinkedIn</a> · <a href={portfolioUrl}>Portfolio</a>
+              <a href={site.linkedin}>LinkedIn</a> · <a href={productionUrl}>Portfolio</a>
             </li>
             <li>{site.location} 5001</li>
           </ul>

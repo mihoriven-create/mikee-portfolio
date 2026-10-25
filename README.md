@@ -74,4 +74,4 @@ npm run start            # leave running, then in a second terminal:
 npm run resume:pdf
 ```
 
-This needs Google Chrome or Microsoft Edge installed (or set `CHROME_PATH`). The résumé's *Portfolio* link points to the live site, https://mikee-portfolio-sepia.vercel.app (set as `fallbackPortfolioUrl` in `src/data/resume.ts`). If you move to a custom domain, change it there, rebuild, run `npm run resume:pdf` again, then commit and push the updated PDF.
+This needs Google Chrome or Microsoft Edge installed (or set `CHROME_PATH`). The résumé's *Portfolio* link points to the live site, https://mikeecamino.vercel.app (set as `productionUrl` in `src/data/site.ts`, which also drives the SEO metadata and sitemap). If you move to a custom domain, change it there, rebuild, run `npm run resume:pdf` again, then commit and push the updated PDF.

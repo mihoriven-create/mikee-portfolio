@@ -37,6 +37,3 @@ export const references: { name: string; role: string; company?: string; phone: 
   { name: "Todd Teich", role: "CEO", company: "American Financial Services, LLC", phone: "+1 651 888 8289", email: "toddt@americanfsllc.com" },
   { name: "Sky Evangelista", role: "Operations Manager", phone: "+63 945 775 6673", email: "sky.mtsd@gmail.com" },
 ];
-
-// Used for the résumé's Portfolio link when the PDF is exported from a local build.
-export const fallbackPortfolioUrl = "https://mikee-portfolio-sepia.vercel.app";
