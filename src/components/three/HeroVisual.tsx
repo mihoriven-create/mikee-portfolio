@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useReducedMotion } from "framer-motion";
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 
 const loadSystemsCore = () => import("./SystemsCore");
 
@@ -57,6 +57,17 @@ export function HeroVisual() {
   const lightPage = useBrowserFlag(wantsLightPage);
   const [ready, setReady] = useState(false);
   const [shown, setShown] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [onScreen, setOnScreen] = useState(true);
+
+  // The orb stops drawing once it has scrolled out of view (the page below has its own 3D to render).
+  useEffect(() => {
+    const el = rootRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([entry]) => setOnScreen(entry.isIntersecting));
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   // Reduced-motion and data-saver visitors never need the live scene: the picture is the orb.
   const skipLive = !!reduced || lightPage;
@@ -117,7 +128,7 @@ export function HeroVisual() {
   }, [capture, skipLive]);
 
   return (
-    <div className="relative size-full" style={{ containerType: "size" }}>
+    <div ref={rootRef} className="relative size-full" style={{ containerType: "size" }}>
       {/* Soft glow behind the picture; also the fallback if images or WebGL are unavailable. */}
       {!capture && (
         <div
@@ -143,7 +154,7 @@ export function HeroVisual() {
       )}
       {showLive && (
         <div className={`absolute inset-0 transition-opacity duration-700 ${liveVisible ? "opacity-100" : "opacity-0"}`}>
-          <SystemsCore animate={!reduced && !capture} poster={capture} onReady={() => setShown(true)} />
+          <SystemsCore animate={!reduced && !capture} poster={capture} paused={!onScreen} onReady={() => setShown(true)} />
         </div>
       )}
     </div>

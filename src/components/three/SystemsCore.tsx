@@ -317,10 +317,13 @@ export default function SystemsCore({
   animate = true,
   onReady,
   poster = false,
+  paused = false,
 }: {
   animate?: boolean;
   onReady?: () => void;
   poster?: boolean;
+  /** Draw nothing while the orb is off screen, so the GPU is free for what is on screen. */
+  paused?: boolean;
 }) {
   const container = useRef<HTMLDivElement>(null);
 
@@ -378,7 +381,7 @@ export default function SystemsCore({
         dpr={[1, 1.5]}
         camera={{ position: [0, 0, 10], fov: 42 }}
         gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
-        frameloop={animate ? "always" : "demand"}
+        frameloop={paused ? "never" : animate ? "always" : "demand"}
         onCreated={() => onReady?.()}
       >
         {/* No lights needed: matcap and basic materials carry their own shading. */}

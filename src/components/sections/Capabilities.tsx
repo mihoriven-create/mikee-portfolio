@@ -3,7 +3,6 @@
 import { ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { SectionTitle } from "@/components/ui/SectionTitle";
-import { CapabilityBackdrop } from "@/components/visuals/CapabilityBackdrop";
 import { projects } from "@/data/projects";
 import { type Expertise, expertise, toolGroups } from "@/data/skills";
 
@@ -63,7 +62,6 @@ export function Capabilities() {
 
   return (
     <section id="expertise" aria-labelledby="cap-title" className="relative isolate">
-      <CapabilityBackdrop active={active} />
       <div className="mx-auto w-full max-w-[1680px] px-5 py-24 sm:px-8 md:px-10 md:py-36">
         <SectionTitle
           id="cap-title"
@@ -74,12 +72,12 @@ export function Capabilities() {
         />
 
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-10">
-          <ul className="border-b border-gold/20 lg:col-span-7">
+          <ul className="lg:col-span-7">
             {expertise.map((item, i) => {
               const on = i === active;
               const panelId = `cap-panel-${i}`;
               return (
-                <li key={item.name} className="border-t border-gold/20">
+                <li key={item.name}>
                   <button
                     type="button"
                     aria-expanded={on}

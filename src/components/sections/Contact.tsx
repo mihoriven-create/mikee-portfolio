@@ -19,7 +19,7 @@ export function Contact() {
     <RevealPanel
       id="contact"
       aria-labelledby="contact-title"
-      className="grain relative overflow-hidden rounded-t-[40px] border-t border-gold/20 bg-gradient-to-b from-ink-2 to-ink px-5 pb-10 pt-24 sm:rounded-t-[50px] sm:px-8 md:rounded-t-[60px] md:px-10 md:pt-32"
+      className="grain relative overflow-hidden rounded-t-[40px] border-t border-gold/20 bg-gradient-to-b from-ink-2/60 to-ink/50 px-5 pb-10 pt-24 sm:rounded-t-[50px] sm:px-8 md:rounded-t-[60px] md:px-10 md:pt-32"
     >
       <div aria-hidden="true" className="pointer-events-none absolute -top-40 left-1/2 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse,rgba(212,175,55,0.22),transparent_65%)]" />
 

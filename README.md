@@ -87,3 +87,15 @@ npm run orb:poster
 ```
 
 Commit the updated `public/orb-poster.webp`. It is rendered from the real scene (`?orb-poster` mode) at a fixed size, and positioned in CSS by `.orb-poster` in `src/app/globals.css`; if you change where the orb sits in the hero, update both.
+
+## The scroll-driven gold background
+
+From **About Me** through **Contact** a single full-screen 3D environment sits behind the sections and changes as you scroll: a warm pool of light and shafts, gold outlines the camera flies through, drifting dust and light trails. It stops at Contact; the hero and the tool strip above About are untouched.
+
+It is one connected system, driven by one number (how far through the story the visitor is):
+
+- `src/components/journey/journeyState.ts` — the shared scroll controller. Each section is anchored at its middle, scroll position becomes continuous progress, and the camera path and scene settings (one waypoint per section) are blended from it. Edit `WAYPOINTS` to change how bright, busy or calm each chapter is.
+- `src/components/journey/JourneyScene.tsx` — the scene (shaders for the atmosphere, depth frames, dust and trails) and the per-frame driver, including a frame-time governor that lowers resolution on slow devices.
+- `src/components/journey/JourneyStage.tsx` — wraps About…Contact in `src/app/page.tsx`, pins the canvas behind them, loads it when the visitor is near, and pauses it off screen.
+
+It follows the technique of the Kage landing page (threeui.com): section-anchored scroll progress, damped easing, a spline camera rig and shader-driven particles. Visitors with reduced motion get a still scene that only redraws as they scroll; data-saver and 2G visitors, or browsers without WebGL, keep a plain dark gold glow.

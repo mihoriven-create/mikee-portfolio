@@ -9,6 +9,7 @@ import { Navbar } from "@/components/sections/Navbar";
 import { Projects } from "@/components/sections/Projects";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { ContactFormDialog } from "@/components/ui/ContactForm";
+import { JourneyStage } from "@/components/journey/JourneyStage";
 import { SmoothScroll } from "@/components/ui/SmoothScroll";
 import { site, siteUrl } from "@/data/site";
 
@@ -36,12 +37,14 @@ export default function Home() {
       <main id="main" className="overflow-x-clip bg-ink">
         <Hero />
         <Marquee />
-        <About />
-        <Capabilities />
-        <Projects />
-        <Experience />
-        <Testimonials />
-        <Contact />
+        <JourneyStage>
+          <About />
+          <Capabilities />
+          <Projects />
+          <Experience />
+          <Testimonials />
+          <Contact />
+        </JourneyStage>
       </main>
     </MotionConfig>
   );
