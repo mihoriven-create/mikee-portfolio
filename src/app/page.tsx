@@ -1,8 +1,8 @@
 import { MotionConfig } from "framer-motion";
 import { About } from "@/components/sections/About";
+import { Capabilities } from "@/components/sections/Capabilities";
 import { Contact } from "@/components/sections/Contact";
 import { Experience } from "@/components/sections/Experience";
-import { Expertise } from "@/components/sections/Expertise";
 import { Hero } from "@/components/sections/Hero";
 import { Marquee } from "@/components/sections/Marquee";
 import { Navbar } from "@/components/sections/Navbar";
@@ -37,7 +37,7 @@ export default function Home() {
         <Hero />
         <Marquee />
         <About />
-        <Expertise />
+        <Capabilities />
         <Projects />
         <Experience />
         <Testimonials />

@@ -49,7 +49,7 @@ export function ProjectCard({ project, index, total, progress }: ProjectCardProp
   const step = project.steps[tab];
 
   return (
-    <div className={stacked ? "sticky top-24 flex h-[88vh] items-start lg:top-28" : ""}>
+    <div id={project.slug} className={stacked ? "sticky top-24 flex h-[88vh] items-start lg:top-28" : ""}>
       <motion.article
         aria-labelledby={`${baseId}-title`}
         style={stacked ? { scale, top: `${index * 28}px` } : undefined}
